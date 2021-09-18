@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 
 import Home from "./Home";
 import Header from './components/Header'
-import Footer from './components/Footer'
+// import Footer from './components/Footer'
 
 import * as anchor from "@project-serum/anchor";
 import { clusterApiUrl } from "@solana/web3.js";
