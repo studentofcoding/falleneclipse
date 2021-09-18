@@ -19,18 +19,19 @@ import {
 
 const ConnectButton = styled(WalletDialogButton)``;
 
-const CounterText = styled.span``; // add your styles here
+const CounterText = styled.span``;
 
-const MintContainer = styled.div``; // add your styles here
+const MintContainer = styled.div``;
 
-const MintButton = styled(Button)``; // add your styles here
+const MintButton = styled(Button)``;
 
 const Home = (props) => {
   const [, setBalance] = useState();
-  const [xolosRemaining, setXolosRemaining] = useState(100); // default 6666
+  const [nftRemaining, setNFTRemaining] = useState(100); // Set this to how many collection will be
   const [isActive, setIsActive] = useState(false); // true when countdown completes
   const [isSoldOut, setIsSoldOut] = useState(false); // true when items remaining is zero
   const [isMinting, setIsMinting] = useState(false); // true when user got to press MINT
+  const nftName = "Demo"; // Set your NFT name here
 
   const [alertState, setAlertState] = useState({
     open: false,
@@ -65,7 +66,7 @@ const Home = (props) => {
         if (!status?.err) {
           setAlertState({
             open: true,
-            message: "Congratulations! you have mint XOLOS!",
+            message: `Congratulations! you have mint ${nftName}!`,
             severity: "success",
           });
         } else {
@@ -77,12 +78,12 @@ const Home = (props) => {
         }
       }
     } catch (error) {
-      // TODO: blech:
+      // This is error message, you can edit the message below
       let message = error.msg || "Minting failed! Please try again!";
       if (!error.msg) {
         if (error.message.indexOf("0x138")) {
         } else if (error.message.indexOf("0x137")) {
-          message = `XOLOS already sold out!, Sorry mate...`;
+          message = `${nftName} already sold out!, Sorry mate...`;
         } else if (error.message.indexOf("0x135")) {
           message = `Insufficient SOL to mint. Please fund your wallet.`;
         }
@@ -142,7 +143,7 @@ const Home = (props) => {
           props.connection
         );
 
-      setXolosRemaining(itemsRemaining);
+      setNFTRemaining(itemsRemaining);
       setIsSoldOut(itemsRemaining === 0);
       setStartDate(goLiveDate);
       setCandyMachine(candyMachine);
@@ -150,14 +151,14 @@ const Home = (props) => {
   }, [wallet, props.candyMachineId, props.connection]);
 
   return (
-    <main className={[props.className, 'home-container flex flex-col items-center'].join(' ')}>
+    <main className={[props.className, 'home-container items-center'].join(' ')}>
       {!wallet.connected &&
-         <p className='text-lg font-bold text-white text-opacity-90 text-center'>XOLOS Will be minting soon!</p>
+         <p className='text-lg font-bold text-white text-opacity-90 text-center'>{nftName} Will be minting soon!</p>
       }
 
-      {wallet.connected && xolosRemaining !== 0 &&
+      {wallet.connected && nftRemaining !== 0 &&
         <>
-          <p className='text-lg font-bold text-white text-opacity-90 mb-4'>Hurry up! just {xolosRemaining} Xolos remaining!</p>
+          <p className='text-lg font-bold text-white text-opacity-90 mb-4'>Hurry up! just {nftRemaining} {nftName} remaining!</p>
           {/* <p className='text-lg font-bold text-white text-opacity-90 mb-4'>Only {penguinsRemaining} out of 6,666 remaining!</p> */}
         </>
       }
@@ -170,9 +171,9 @@ const Home = (props) => {
         <p>Balance: {(balance || 0).toLocaleString()} SOL</p>
       )} */}
 
-      <MintContainer className='mt-6'>
+      <MintContainer className='mt-6 text-centered'>
         {!wallet.connected ? (
-          <ConnectButton>Connect Wallet</ConnectButton>
+          <ConnectButton variant="contained">Connect Wallet</ConnectButton>
         ) : (
           <MintButton
             disabled={isSoldOut || isMinting || !isActive}
@@ -186,7 +187,7 @@ const Home = (props) => {
               isMinting ? (
                 <CircularProgress />
               ) : (
-                "Mint your Swaggy XOLOS! "
+                `Mint your Swaggy ${nftName}!`
               )
             ) : (
               <Countdown

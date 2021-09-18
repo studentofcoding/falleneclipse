@@ -55,3 +55,7 @@
 .MuiButton-label, .MuiTypography-root {
   color: white;
 }
+
+.button {
+  background-color: #303f9f !important;
+}
