@@ -176,8 +176,8 @@ const Home = (props) => {
           <ConnectButton variant="contained">Connect Wallet</ConnectButton>
         ) : (
           <MintButton
-            disabled={isSoldOut || isMinting || !isActive}
-            // disabled
+            // disabled={isSoldOut || isMinting || !isActive}
+            disabled
             onClick={onMint}
             variant="contained"
           >
