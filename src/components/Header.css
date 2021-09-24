@@ -1,0 +1,13 @@
+header {
+  background-color: black;
+  padding:0 50%;
+}
+
+header button {
+  text-decoration:none !important;
+  font-weight: bold !important;
+}
+
+header a {
+  margin: auto;
+}

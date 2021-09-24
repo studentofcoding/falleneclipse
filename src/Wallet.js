@@ -8,7 +8,7 @@ import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletDialogButton } from "@solana/wallet-adapter-material-ui";
-import './Home.css';
+import './Wallet.css';
 
 import {
   awaitTransactionSignatureConfirmation,
@@ -25,7 +25,7 @@ const MintContainer = styled.div``;
 
 const MintButton = styled(Button)``;
 
-const Home = (props) => {
+const Wallet = (props) => {
   const [, setBalance] = useState();
   const [nftRemaining, setNFTRemaining] = useState(100); // Set this to how many collection will be
   const [isActive, setIsActive] = useState(false); // true when countdown completes
@@ -176,13 +176,13 @@ const Home = (props) => {
           <ConnectButton variant="contained">Connect Wallet</ConnectButton>
         ) : (
           <MintButton
-            // disabled={isSoldOut || isMinting || !isActive}
-            disabled
+            disabled={isSoldOut || isMinting || !isActive}
+            // disabled
             onClick={onMint}
             variant="contained"
           >
             {isSoldOut ? (
-              "SOLD OUT"
+              `${nftName} SOLD OUT !`
             ) : isActive ? (
               isMinting ? (
                 <CircularProgress />
@@ -225,4 +225,4 @@ const renderCounter = ({ days, hours, minutes, seconds, completed }) => {
   );
 };
 
-export default Home;
+export default Wallet;
