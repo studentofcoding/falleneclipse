@@ -26,6 +26,9 @@ const MintContainer = styled.div``;
 const MintButton = styled(Button)``;
 
 const Wallet = (props) => {
+  /**
+   * * This is where all the wallet variable located
+   */
   const [, setBalance] = useState();
   const [nftRemaining, setNFTRemaining] = useState(100); // Set this to how many collection will be
   const [isActive, setIsActive] = useState(false); // true when countdown completes

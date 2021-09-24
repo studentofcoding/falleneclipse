@@ -15,6 +15,8 @@ const Header = () => {
             <NavLink exact to='/faq'>
                 <Button variant="text">FAQ</Button>
             </NavLink>
+            
+            {/** Change your discord link here */}
             <a href='https://discord.gg/hK9jDZHe' rel="noreferrer" target='_blank'>
                 <FaDiscord size={22} color='#ffffff'/>
             </a>
