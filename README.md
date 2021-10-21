@@ -1,14 +1,14 @@
-# Candy-Machine-Mint
+# FRONTEND : Setting up Candy machine mint page
 
-The Candy-Machine-Mint project is designed to let users fork, customize, and deploy their own candy machine mint app to a custom domain, ultra fast.
+This Candy-Machine-Mint project is designed to be customable with React compoment, please read the documentation listed below to get the basic :
+* [React official doc](https://reactjs.org/tutorial/tutorial.html)
+* [React Codecamp tutorial](https://www.youtube.com/watch?v=nTeuhbP7wdE)
 
-A candy machine is an on-chain Solana program (or smart contract) for managing fair mint. Fair mints:
-* Start and finish at the same time for everyone.
-* Won't accept your funds if they're out of NFTs to sell.
-
-The Candy-Machine-Mint project is meant to be as simple and usable as possible, accessible to everyone from long-time crypto devs to junior React devs with a vague interest in NFTs. Our goal is to empower users to create their own front ends to display, sell, and manage their NFTs as simply as possible by just updating a few styled components and following a well-documented process for setup and shipping.
-
-## Getting Set Up
+The project itself are consist of several js component that can be customized based on your needs
+* Components folder that include Footer and Header
+* Pages folder that inlcude faq, home, and roadmap.js
+* Wallet.js to control the wallet details
+* and others (candy-machine.js, and index.js in which we will keep it default)
 
 ### Prerequisites
 
@@ -23,14 +23,12 @@ The Candy-Machine-Mint project is meant to be as simple and usable as possible, 
 
 1. Fork the project, then clone down. Example:
 ```
-git clone git@github.com:exiled-apes/candy-machine-mint.git
+git clone git@github.com:exiled-apes/name_of_project.git
 ```
 
 2. Build the project. Example:
 ```
-cd candy-machine-mint
-yarn install
-yarn build
+cd name_of_project && yarn install && yarn build
 ```
 
 3. Define your environment variables using the instructions below, and start up the server with `npm start`.
@@ -75,52 +73,83 @@ REACT_APP_TREASURY_ADDRESS="redacted"
 
 This the Solana address that receives the funds gathered during the minting process. More docs coming as we can test this.
 
+# BACKEND : Integrate with candy machine mint
 
+* Pull and Install the repository from [this](https://github.com/metaplex-foundation/metaplex)
+* Follow the guide and reference below
 
+#### CANDY MACHINE TUTORIAL REFERENCE
+* [levicook](https://hackmd.io/@levicook/HJcDneEWF)
+* [Nicholas Oxford](https://dev.to/nicholasoxford/getting-started-with-metaplex-a-solana-nft-journey-pt-1-1jff)
 
-# Getting Started with Create React App
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Install and build
 
-## Available Scripts
+```
+yarn install
+yarn build
+yarn run package:linuxb
+OR
+yarn run package:linux
+OR
+yarn run package:macos
+```
 
-In the project directory, you can run:
+You can now either use `metaplex` OR the `ts-node cli` to execute the following commands.
 
-### `yarn start`
+1. Upload your images and metadata. Refer to the NFT [standard](https://docs.metaplex.com/nft-standard) for the correct format.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+metaplex upload ~/nft-test/mini_drop --keypair ~/.config/solana/id.json
+ts-node cli upload ~/nft-test/mini_drop --keypair ~/.config/solana/id.json
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Verify everything is uploaded. Rerun the first command until it is.
 
-### `yarn test`
+```
+metaplex verify --keypair ~/.config/solana/id.json
+ts-node cli verify --keypair ~/.config/solana/id.json
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Create your candy machine. It can cost up to ~15 solana per 10,000 images.
 
-### `yarn build`
+```
+metaplex create_candy_machine -k ~/.config/solana/id.json -p 1
+ts-node cli create_candy_machine -k ~/.config/solana/id.json -p 3
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Set the start date and update the price of your candy machine.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+metaplex update_candy_machine -k ~/.config/solana/id.json -d "20 Apr 2021 04:20:00 GMT" -p 0.1
+ts-node cli update_candy_machine -k ~/.config/solana/id.json -d "20 Apr 2021 04:20:00 GMT" -p 0.1
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Test mint a token (provided it's after the start date)
 
-### `yarn eject`
+```
+metaplex mint_one_token -k ~/.config/solana/id.json
+ts-node cli mint_one_token -k ~/.config/solana/id.json
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+6. Check if you received any tokens.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+spl-token accounts
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+7. If you are listed as a creator, run this command to sign your NFTs post sale. This will sign only the latest candy machine that you've created (stored in .cache/candyMachineList.json).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+metaplex sign_candy_machine_metadata -k ~/.config/solana/id.json
+ts-node cli sign_candy_machine_metadata -k ~/.config/solana/id.json
+```
 
-## Learn More
+8. If you wish to sign metadata from another candy machine run with the --cndy flag.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+metaplex sign_candy_machine_metadata -k ~/.config/solana/id.json --cndy CANDY_MACHINE_ADDRESS_HERE
+ts-node cli sign_candy_machine_metadata -k ~/.config/solana/id.json --cndy CANDY_MACHINE_ADDRESS_HERE
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
